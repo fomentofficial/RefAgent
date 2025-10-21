@@ -1,10 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServiceSupabase } from '@/lib/supabase';
 import { hashPassword, normalizePhoneNumber, validatePassword } from '@/lib/auth';
+import { checkRateLimit, incrementRateLimit, getClientIp } from '@/lib/rate-limit';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check rate limit
+    const clientIp = getClientIp(request);
+    const { allowed, remaining } = await checkRateLimit(clientIp, 'create_notice');
+
+    if (!allowed) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const {
       template_id,
@@ -111,8 +123,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Increment rate limit
+    await incrementRateLimit(clientIp, 'create_notice');
+
     return NextResponse.json(
-      { noticeId, message: 'Notice created successfully' },
+      { noticeId, message: 'Notice created successfully', remaining: remaining - 1 },
       { status: 201 }
     );
   } catch (error) {
