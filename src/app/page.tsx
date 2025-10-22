@@ -32,65 +32,61 @@ export default function Home() {
                   <div className="h-full transition-all duration-300 hover:scale-105">
                     {/* Template Preview Card */}
                     <div
-                      className="rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
+                      className="rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 relative aspect-[3/4]"
                       style={{ backgroundColor: template.backgroundColor }}
                     >
-                      {/* Mini Preview */}
-                      <div className="p-8 aspect-[3/4]">
-                        <div className="h-full flex flex-col items-center justify-center space-y-6">
-                          {/* Decorative Element based on template */}
-                          <div className="w-16 h-16 flex items-center justify-center">
-                            {template.id === 'classic' && (
-                              <div className="text-4xl" style={{ color: template.accentColor }}>⚘</div>
-                            )}
-                            {template.id === 'modern' && (
-                              <div className="w-12 h-12 rounded-full" style={{ background: `linear-gradient(135deg, ${template.accentColor}, ${template.textColor})` }}></div>
-                            )}
-                            {template.id === 'elegant' && (
-                              <div className="text-4xl" style={{ color: template.accentColor }}>✿</div>
-                            )}
-                            {template.id === 'minimal' && (
-                              <div className="w-8 h-8 rounded-sm" style={{ backgroundColor: template.accentColor }}></div>
-                            )}
-                          </div>
+                      {/* Template Content */}
+                      <div className="absolute inset-0 p-8 flex flex-col items-center justify-center space-y-6">
+                        {/* Decorative Element based on template */}
+                        <div className="w-16 h-16 flex items-center justify-center">
+                          {template.id === 'classic' && (
+                            <div className="text-4xl" style={{ color: template.accentColor }}>⚘</div>
+                          )}
+                          {template.id === 'modern' && (
+                            <div className="w-12 h-12 rounded-full" style={{ background: `linear-gradient(135deg, ${template.accentColor}, ${template.textColor})` }}></div>
+                          )}
+                          {template.id === 'elegant' && (
+                            <div className="text-4xl" style={{ color: template.accentColor }}>✿</div>
+                          )}
+                          {template.id === 'minimal' && (
+                            <div className="w-8 h-8 rounded-sm" style={{ backgroundColor: template.accentColor }}></div>
+                          )}
+                        </div>
 
-                          {/* Template Name */}
-                          <div className="text-center">
-                            <h3
-                              className="text-2xl font-medium mb-2"
-                              style={{
-                                color: template.textColor,
-                                fontFamily: template.fontFamily
-                              }}
-                            >
-                              {template.name}
-                            </h3>
-                            <p
-                              className="text-sm opacity-70"
-                              style={{ color: template.textColor }}
-                            >
-                              {template.description}
-                            </p>
-                          </div>
-
-                          {/* Preview Text */}
-                          <div className="text-center space-y-2 text-xs opacity-60" style={{ color: template.textColor, fontFamily: template.fontFamily }}>
-                            <div className="font-medium">부 고</div>
-                            <div>홍길동님의 별세를</div>
-                            <div>알려드립니다</div>
-                          </div>
+                        {/* Preview Text */}
+                        <div className="text-center space-y-2 text-xs opacity-60" style={{ color: template.textColor, fontFamily: template.fontFamily }}>
+                          <div className="font-medium">부 고</div>
+                          <div>홍길동님의 별세를</div>
+                          <div>알려드립니다</div>
                         </div>
                       </div>
 
-                      {/* Select Button */}
+                      {/* Gradient Blur Overlay at Bottom */}
                       <div
-                        className="px-6 py-4 text-center font-medium transition-colors duration-300"
+                        className="absolute bottom-0 left-0 right-0 backdrop-blur-md"
                         style={{
-                          backgroundColor: template.accentColor,
-                          color: template.backgroundColor
+                          background: `linear-gradient(to top, ${template.backgroundColor}f0, ${template.backgroundColor}e0 50%, transparent)`,
+                          paddingTop: '3rem',
+                          paddingBottom: '1.5rem'
                         }}
                       >
-                        선택하기
+                        <div className="px-6 text-center">
+                          <h3
+                            className="text-xl font-medium mb-1"
+                            style={{
+                              color: template.textColor,
+                              fontFamily: template.fontFamily
+                            }}
+                          >
+                            {template.name}
+                          </h3>
+                          <p
+                            className="text-sm font-medium"
+                            style={{ color: template.accentColor }}
+                          >
+                            만들기 →
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
