@@ -1,0 +1,11 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "claude/main-011CUMb12tbei4wrG9AYTfQ8": true
+    }
+  },
+  "github": {
+    "enabled": true,
+    "autoAlias": true
+  }
+}
