@@ -6,6 +6,7 @@
   },
   "github": {
     "enabled": true,
-    "autoAlias": true
+    "autoAlias": true,
+    "silent": false
   }
 }
