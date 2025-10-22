@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +26,8 @@ interface NoticeData {
   message?: string;
 }
 
-export default function ManagePage({ params }: { params: { id: string } }) {
+export default function ManagePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [notice, setNotice] = useState<NoticeData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,11 +37,11 @@ export default function ManagePage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     fetchNotice();
-  }, [params.id]);
+  }, [id]);
 
   const fetchNotice = async () => {
     try {
-      const response = await fetch(`/api/notices/${params.id}`);
+      const response = await fetch(`/api/notices/${id}`);
       if (!response.ok) {
         throw new Error('Failed to fetch notice');
       }
@@ -49,7 +50,7 @@ export default function ManagePage({ params }: { params: { id: string } }) {
     } catch (error) {
       console.error('Error fetching notice:', error);
       setError('부고장을 불러올 수 없습니다. 다시 로그인해주세요.');
-      setTimeout(() => router.push(`/owner/${params.id}/login`), 2000);
+      setTimeout(() => router.push(`/owner/${id}/login`), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +77,7 @@ export default function ManagePage({ params }: { params: { id: string } }) {
     setError('');
 
     try {
-      const response = await fetch(`/api/notices/${params.id}`, {
+      const response = await fetch(`/api/notices/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(notice),
@@ -87,7 +88,7 @@ export default function ManagePage({ params }: { params: { id: string } }) {
       }
 
       alert('부고장이 성공적으로 수정되었습니다.');
-      router.push(`/notice/${params.id}`);
+      router.push(`/notice/${id}`);
     } catch (error) {
       console.error('Error updating notice:', error);
       setError('수정에 실패했습니다. 다시 시도해주세요.');
@@ -104,7 +105,7 @@ export default function ManagePage({ params }: { params: { id: string } }) {
     setIsDeleting(true);
 
     try {
-      const response = await fetch(`/api/notices/${params.id}`, {
+      const response = await fetch(`/api/notices/${id}`, {
         method: 'DELETE',
       });
 
@@ -125,7 +126,7 @@ export default function ManagePage({ params }: { params: { id: string } }) {
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      router.push(`/notice/${params.id}`);
+      router.push(`/notice/${id}`);
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -376,7 +377,7 @@ export default function ManagePage({ params }: { params: { id: string } }) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push(`/notice/${params.id}`)}
+              onClick={() => router.push(`/notice/${id}`)}
             >
               취소
             </Button>

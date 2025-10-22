@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getTemplateById } from '@/lib/templates';
 
-export default function CreatePage() {
+function CreateForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const templateId = searchParams.get('template') || 'classic';
@@ -346,5 +346,17 @@ export default function CreatePage() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function CreatePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-600">로딩 중...</p>
+      </div>
+    }>
+      <CreateForm />
+    </Suspense>
   );
 }

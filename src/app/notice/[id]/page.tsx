@@ -11,9 +11,9 @@ import { Settings } from 'lucide-react';
 import { geocodeAddress } from '@/lib/kakao-map';
 
 interface NoticePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function getNotice(id: string): Promise<Notice | null> {
@@ -36,7 +36,8 @@ async function getNotice(id: string): Promise<Notice | null> {
 export async function generateMetadata({
   params,
 }: NoticePageProps): Promise<Metadata> {
-  const notice = await getNotice(params.id);
+  const { id } = await params;
+  const notice = await getNotice(id);
 
   if (!notice) {
     return {
@@ -53,7 +54,7 @@ export async function generateMetadata({
       title: `${notice.deceased_name}님 부고`,
       description: `장소: ${notice.funeral_hall}, 발인: ${burialDate}`,
       type: 'website',
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/notice/${params.id}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/notice/${id}`,
       images: [
         {
           url: `${process.env.NEXT_PUBLIC_APP_URL}/og-image.png`,
@@ -72,7 +73,8 @@ export async function generateMetadata({
 }
 
 export default async function NoticePage({ params }: NoticePageProps) {
-  const notice = await getNotice(params.id);
+  const { id } = await params;
+  const notice = await getNotice(id);
 
   if (!notice) {
     notFound();
@@ -92,7 +94,7 @@ export default async function NoticePage({ params }: NoticePageProps) {
       <div className="container mx-auto px-4 max-w-4xl">
         {/* 관리 버튼 */}
         <div className="flex justify-end mb-4">
-          <Link href={`/owner/${params.id}/login`}>
+          <Link href={`/owner/${id}/login`}>
             <Button variant="outline" size="sm">
               <Settings className="w-4 h-4 mr-2" />
               관리하기
@@ -119,7 +121,7 @@ export default async function NoticePage({ params }: NoticePageProps) {
         {/* 공유 버튼 */}
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <ShareButtons
-            noticeId={params.id}
+            noticeId={id}
             deceasedName={notice.deceased_name}
           />
         </div>
