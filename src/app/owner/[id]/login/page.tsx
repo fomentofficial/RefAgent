@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function OwnerLoginPage({ params }: { params: { id: string } }) {
+export default function OwnerLoginPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [formData, setFormData] = useState({
     phone: '',
@@ -34,7 +35,7 @@ export default function OwnerLoginPage({ params }: { params: { id: string } }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          noticeId: params.id,
+          noticeId: id,
           phone: formData.phone,
           password: formData.password,
         }),
@@ -54,7 +55,7 @@ export default function OwnerLoginPage({ params }: { params: { id: string } }) {
       }
 
       // Redirect to manage page
-      router.push(`/owner/${params.id}/manage`);
+      router.push(`/owner/${id}/manage`);
     } catch (error) {
       console.error('Login error:', error);
       setError('로그인 중 오류가 발생했습니다.');
@@ -135,7 +136,7 @@ export default function OwnerLoginPage({ params }: { params: { id: string } }) {
         <div className="text-center mt-4">
           <Button
             variant="ghost"
-            onClick={() => router.push(`/notice/${params.id}`)}
+            onClick={() => router.push(`/notice/${id}`)}
           >
             부고장으로 돌아가기
           </Button>

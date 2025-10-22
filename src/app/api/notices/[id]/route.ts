@@ -5,15 +5,16 @@ import { getSessionToken, validateSession } from '@/lib/session';
 // GET - 부고장 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = getServiceSupabase();
 
     const { data, error } = await supabase
       .from('notices')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('is_active', true)
       .single();
 
@@ -37,9 +38,11 @@ export async function GET(
 // PUT - 부고장 수정
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     // Validate session
     const sessionToken = await getSessionToken();
     if (!sessionToken) {
@@ -50,7 +53,7 @@ export async function PUT(
     }
 
     const { valid, noticeId } = await validateSession(sessionToken);
-    if (!valid || noticeId !== params.id) {
+    if (!valid || noticeId !== id) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -98,7 +101,7 @@ export async function PUT(
         message,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 
@@ -126,9 +129,11 @@ export async function PUT(
 // DELETE - 부고장 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     // Validate session
     const sessionToken = await getSessionToken();
     if (!sessionToken) {
@@ -139,7 +144,7 @@ export async function DELETE(
     }
 
     const { valid, noticeId } = await validateSession(sessionToken);
-    if (!valid || noticeId !== params.id) {
+    if (!valid || noticeId !== id) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -155,7 +160,7 @@ export async function DELETE(
         is_active: false,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', params.id);
+      .eq('id', id);
 
     if (error) {
       console.error('Error deleting notice:', error);
