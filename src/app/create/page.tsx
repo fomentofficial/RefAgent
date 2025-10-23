@@ -80,15 +80,21 @@ function CreateForm() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
+    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-gray-50 py-12">
       <div className="container mx-auto px-4 max-w-3xl">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">
             부고장 만들기
           </h1>
-          <p className="text-gray-600">
-            선택한 템플릿: <span className="font-semibold">{template.name}</span>
-          </p>
+          <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-gray-200">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: template.accentColor }}
+            />
+            <span className="text-sm font-medium text-gray-700">
+              {template.name} 템플릿
+            </span>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
