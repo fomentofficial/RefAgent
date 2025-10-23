@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, use } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function OwnerLoginPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function OwnerLoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     phone: '',
@@ -72,7 +72,7 @@ export default function OwnerLoginPage({ params }: { params: Promise<{ id: strin
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            관리자 로그인
+            내 부고장 관리
           </h1>
           <p className="text-gray-600">
             부고장을 수정하려면 로그인하세요
@@ -97,6 +97,9 @@ export default function OwnerLoginPage({ params }: { params: Promise<{ id: strin
                   placeholder="010-1234-5678"
                   disabled={isLoading}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  부고장 생성 시 등록한 전화번호
+                </p>
               </div>
 
               <div>
@@ -108,9 +111,12 @@ export default function OwnerLoginPage({ params }: { params: Promise<{ id: strin
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="8자 이상"
+                  placeholder="비밀번호 입력"
                   disabled={isLoading}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  부고장 생성 시 설정한 비밀번호
+                </p>
               </div>
 
               {error && (
@@ -127,22 +133,26 @@ export default function OwnerLoginPage({ params }: { params: Promise<{ id: strin
                 {isLoading ? '로그인 중...' : '로그인'}
               </Button>
 
-              <div className="text-center pt-4">
-                <p className="text-sm text-gray-600">
-                  부고장 생성 시 설정한 전화번호와 비밀번호를 입력하세요
+              <div className="text-center pt-4 border-t">
+                <p className="text-sm text-gray-600 mb-2">
+                  아직 부고장이 없으신가요?
                 </p>
+                <Link href="/">
+                  <Button variant="ghost" className="w-full">
+                    부고장 만들기
+                  </Button>
+                </Link>
               </div>
             </form>
           </CardContent>
         </Card>
 
         <div className="text-center mt-4">
-          <Button
-            variant="ghost"
-            onClick={() => router.push(`/notice/${id}`)}
-          >
-            부고장으로 돌아가기
-          </Button>
+          <Link href="/">
+            <Button variant="ghost">
+              메인으로 돌아가기
+            </Button>
+          </Link>
         </div>
       </div>
     </main>

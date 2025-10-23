@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { templates } from '@/lib/templates';
-import { Settings } from 'lucide-react';
+import { Settings, Sparkles, Check, ArrowRight, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 export default function Home() {
   const [previewTemplate, setPreviewTemplate] = useState<string | null>(null);
@@ -27,31 +29,35 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Header */}
-      <header className="border-b border-gray-100">
+      <header className="sticky top-0 z-40 backdrop-blur-lg bg-white/80 border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/" className="text-xl font-light text-gray-900">
+          <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-gray-700 transition-colors">
             모바일 부고장
           </Link>
-          <Link
-            href="/owner/login"
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <Settings className="w-4 h-4" />
-            <span>내 부고장 관리</span>
-          </Link>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/owner/login" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              <span>내 부고장 관리</span>
+            </Link>
+          </Button>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-16 md:py-24">
         {/* Hero Section */}
         <div className="text-center mb-20">
-          <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-6 tracking-tight">
+          <div className="inline-flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2 mb-6">
+            <Sparkles className="w-4 h-4 text-gray-600" />
+            <span className="text-sm font-medium text-gray-700">간편하게 만드는 디지털 부고장</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
             모바일 부고장
           </h1>
-          <p className="text-xl text-gray-500 font-light">
-            3분 안에 부고장을 만들고 공유하세요
+          <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
+            3분 안에 부고장을 만들고 공유하세요<br />
+            <span className="text-base text-gray-500">회원가입 없이 전화번호만으로 간편하게</span>
           </p>
         </div>
 
@@ -151,7 +157,7 @@ export default function Home() {
                       >
                         <div className="px-6">
                           <h3
-                            className="text-xl font-medium mb-3 text-center"
+                            className="text-xl font-semibold mb-3 text-center"
                             style={{
                               color: template.textColor,
                               fontFamily: template.fontFamily
@@ -160,27 +166,32 @@ export default function Home() {
                             {template.name}
                           </h3>
                           <div className="flex gap-2">
-                            <button
+                            <Button
+                              variant="outline"
+                              size="sm"
                               onClick={() => setPreviewTemplate(template.id)}
-                              className="flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all hover:opacity-90"
+                              className="flex-1"
                               style={{
                                 backgroundColor: template.backgroundColor,
                                 color: template.accentColor,
-                                border: `1px solid ${template.accentColor}`
+                                borderColor: template.accentColor
                               }}
                             >
                               미리보기
-                            </button>
-                            <Link
-                              href={`/create?template=${template.id}`}
-                              className="flex-1 py-2.5 px-4 rounded-lg text-sm font-medium text-center transition-all hover:opacity-90"
+                            </Button>
+                            <Button
+                              size="sm"
+                              asChild
+                              className="flex-1"
                               style={{
                                 backgroundColor: template.accentColor,
                                 color: template.backgroundColor
                               }}
                             >
-                              만들기 →
-                            </Link>
+                              <Link href={`/create?template=${template.id}`}>
+                                만들기 <ArrowRight className="w-4 h-4 ml-1" />
+                              </Link>
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -192,33 +203,45 @@ export default function Home() {
           </div>
 
           {/* Features Section */}
-          <div className="bg-gray-50 rounded-3xl p-8 md:p-12">
-            <h3 className="text-2xl font-light text-gray-900 mb-8 text-center">
-              서비스 특징
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center text-white text-xs">✓</div>
-                <p className="text-gray-600 font-light">회원가입 없이 전화번호로 간편 인증</p>
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-8 md:p-12">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-8 text-center">
+                서비스 특징
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-gray-700">회원가입 없이 전화번호로 간편 인증</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-gray-700">카카오지도로 장례식장 위치 표시</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-gray-700">상주 연락처 및 계좌정보 입력 가능</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-gray-700">카카오톡, 문자, SNS로 손쉬운 공유</p>
+                </div>
+                <div className="flex items-start space-x-3 md:col-span-2 justify-center">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-gray-700">언제든지 내용 수정 및 관리 가능</p>
+                </div>
               </div>
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center text-white text-xs">✓</div>
-                <p className="text-gray-600 font-light">카카오지도로 장례식장 위치 표시</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center text-white text-xs">✓</div>
-                <p className="text-gray-600 font-light">상주 연락처 및 계좌정보 입력 가능</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center text-white text-xs">✓</div>
-                <p className="text-gray-600 font-light">카카오톡, 문자, SNS로 손쉬운 공유</p>
-              </div>
-              <div className="flex items-start space-x-3 md:col-span-2 justify-center">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center text-white text-xs">✓</div>
-                <p className="text-gray-600 font-light">언제든지 내용 수정 및 관리 가능</p>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
@@ -228,27 +251,27 @@ export default function Home() {
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={() => setPreviewTemplate(null)}
         >
-          <div
-            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          <Card
+            className="max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-semibold text-gray-900">
                 {templates.find(t => t.id === previewTemplate)?.name} 템플릿 미리보기
               </h3>
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => setPreviewTemplate(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="h-8 w-8 p-0"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+                <X className="h-4 w-4" />
+              </Button>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto flex-1">
               {(() => {
                 const template = templates.find(t => t.id === previewTemplate);
                 if (!template) return null;
@@ -401,20 +424,20 @@ export default function Home() {
 
             {/* Modal Footer */}
             <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex gap-3">
-              <button
+              <Button
+                variant="outline"
                 onClick={() => setPreviewTemplate(null)}
-                className="flex-1 py-2.5 px-4 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                className="flex-1"
               >
                 닫기
-              </button>
-              <Link
-                href={`/create?template=${previewTemplate}`}
-                className="flex-1 py-2.5 px-4 rounded-lg text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 transition-colors text-center"
-              >
-                이 템플릿으로 만들기 →
-              </Link>
+              </Button>
+              <Button asChild className="flex-1">
+                <Link href={`/create?template=${previewTemplate}`}>
+                  이 템플릿으로 만들기 <ArrowRight className="w-4 h-4 ml-1" />
+                </Link>
+              </Button>
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </main>
